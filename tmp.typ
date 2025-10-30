@@ -58,7 +58,7 @@
       inset: 10pt,
       width: 100%
     )
-    set text(size: 10pt, font: "DejaVu Sans Mono")
+    set text(size: 8pt, font: "DejaVu Sans Mono")
     it
   }
   show raw.where(block: false): it => {
