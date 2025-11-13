@@ -219,9 +219,13 @@
 
     #indent[
       #for item in data [
-        == #item.subbab
-
-        #indent[#item.konten]
+        #if (item.subbab != "" and item.subbab != none) [
+          == #item.subbab
+          
+          #indent[#item.konten]
+        ] else [
+          #item.konten
+        ]
 
         #colbreak()
       ]
