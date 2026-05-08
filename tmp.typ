@@ -15,7 +15,7 @@
   
   // Document Settings
   set document(title: title, author: name)
-  set page(paper: "a4")
+  set page(paper: "a4", margin: 4.5em)
   set text(font: "Arial", size: 12pt, lang: "id")
   set text(font: "Arial", size: 12pt, lang: "id")
   set par(justify: true, leading: 1em, spacing: 1.5em)
@@ -56,7 +56,8 @@
       stroke: 1pt + rgb("#e0e0e0"),
       radius: 5pt,
       inset: 10pt,
-      width: 100%
+      width: 100%,
+      clip: true
     )
     set text(size: 8pt, font: "DejaVu Sans Mono")
     it
@@ -181,6 +182,10 @@
         #indent[
 
           #item.deskripsi
+          
+          #v(1em)
+          === Langkah-langkah
+          #v(0.5em)
 
           #for point in item.langkah [
             + #point
@@ -190,7 +195,9 @@
 
         #if item.pertanyaan.len() != 0 [
           #colbreak()
-          #text(weight: "bold", size: 16pt, "Pertanyaan")
+          
+          === Pertanyaan
+          #v(0.5em)
     
           #indent[
             #for (i, (point, answer)) in item.pertanyaan.enumerate() [

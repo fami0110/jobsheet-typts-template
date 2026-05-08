@@ -1,8 +1,8 @@
-#import "../../tmp.typ": lab_report, praktikum, tugas, tujuan, indent
+#import "../../tmp.typ": indent, lab_report, praktikum, tugas, tujuan
 
 #lab_report(
-  title: "LAPORAN PRAKTIKUM",
-  course: "PRAKTIKUM DASAR PEMOGRAMAN",
+  title: "LAPORAN PRAKTIKUM ALGORITMA & STRUKTUR DATA",
+  course: "PRAKTIKUM ALGORITMA & STRUKTUR DATA",
   subtitle: "(JOBSHEET 7)",
   name: "Masando Fami Ramadhan",
   nim: "254107060011",
@@ -11,529 +11,335 @@
   study_program: "PROGRAM STUDI SISTEM INFORMASI BISNIS",
   department: "JURUSAN TEKNOLOGI INFORMASI",
   institution: "POLITEKNIK NEGERI MALANG",
-  year: "2025",
+  year: "2026",
 )[
+
   #tujuan(data: (
-    "Mahasiswa dapat menjelaskan format penulisan program perulangan (for, while, dan do-while)",
-    "Mahasiswa dapat mengimplementasikan flowchart perulangan menggunakan bahasa pemrograman Java",
+    "Menjelaskan mengenai algoritma Searching.",
+    "Membuat dan mendeklarasikan struktur algoritma Searching.",
+    "Menerapkan dan mengimplementasikan algoritma Searching."
   ))
 
   #praktikum(data: (
     (
-      subbab: "Percobaan 1: Studi Kasus Nilai Mahasiswa di SIAKAD - Perulangan FOR",
+      subbab: "Percobaan 1: Sequential Search",
       deskripsi: [
-        Di dalam Sistem Informasi Akademik (SIAKAD), dosen mengisi nilai mata kuliah Praktikum Dasar Pemrograman yang ditempuh oleh mahasiswa. Dosen tersebut ingin mencari nilai tertinggi dan terendah Kuis dari 10 mahasiswa di dalam satu kelas. Dosen tersebut harus memasukkan nilai dari setiap siswa, kemudian menentukan dan menampilkan nilai tertinggi dan terendah. Perhatikan flowchart berikut ini:
+        Perhatikan diagram class Mahasiswa di bawah ini. Diagram class ini yang selanjutnya akan dibuat sebagai acuan dalam membuat kode program class Mahasiswa.
 
         #align(center)[
-          #image("1.png", width: 50%)
+          #table(
+            columns: (auto),
+            inset: 8pt,
+            align: left,
+            align(center)[*Mahasiswa*],
+            [
+              nim: String \
+              nama: String \
+              kelas: String \
+              ipk: double
+            ],
+            [
+              Mahasiswa() \
+              Mahasiswa(nm: String, name: String, kls: String, ip: double) \
+              tampilInformasi(): void
+            ]
+          )
         ]
 
-        Buatlah program java berdasarkan studi kasus tersebut!
+        #set align(left)
+        Berdasarkan class diagram di atas, akan dibuat class Mahasiswa yang berfungsi untuk membuat objek mahasiswa yang akan dimasukan ke dalam sebuah array. Terdapat sebuah konstruktor berparameter dan juga fungsi #raw("tampilInformasi()") untuk menampilkan semua atribut yang ada.
+
+        #align(center)[
+          #table(
+            columns: (auto),
+            inset: 8pt,
+            align: left,
+            align(center)[*MahasiswaBerprestasi*],
+            [
+              listMhs: Mahasiswa[5] \
+              idx: int
+            ],
+            [
+              tambah(mhs: Mahasiswa): void \
+              tampil(): void \
+              sequentialSearch(double cari): int \
+              tampilPoisisi(double x, int pos): void \
+              tampilDataSearch(double x, int pos) : void
+            ]
+          )
+        ]
+
+        #set align(left)
+        Selanjutnya class diagram di atas merupakan representasi dari sebuah class yang berfungsi untuk melakukan operasi-operasi dari objek array Mahasiswa, misalkan untuk menambahkan objek mahasiswa, menampilkan semua data mahasiswa, untuk melakukan pencarian berdasarkan IPK menggunakan algoritma Sequential Search, menampilkan posisi dari data yang dicari, serta menampilkan data mahasiswa yang dicari.
       ],
       langkah: (
-        [Masih dengan repo yang sama, buat folder baru bernamakan "Jobsheet7". Buat file baru di dalam folder tersebut dengan nama `SiakadFor{NoAbsen}.java`.],
-        [Tambahkan kode berikut:
+        // [Buat file baru dengan nama `MahasiswaBerprestasi{NoAbsen}.java`.],
+        [Tambahkan fungsi `sequentialSearching`, `tampilPosisi`, dan `tampilDataSearch` di file `MahasiswaBerprestasi{NoAbsen}.java`:
+        ```java
+        int sequentialSearching(double cari) {
+          int posisi = -1;
+          for (int j = 0; j < listMhs.length; j++) {
+            if (listMhs[j].ipk == cari) {
+              posisi = j;
+              break;
+            }
+          }
+          return posisi;
+        }
+
+        void tampilPosisi(double x, int pos) {
+          if (pos != -1) {
+            System.out.println("data mahasiswa dengan IPK : " + x + " ditemukan pada indeks " + pos);
+          } else {
+            System.out.println("data " + x + " tidak ditemukan");
+          }
+        }
+
+        void tampilDataSearch(double x, int pos) {
+          if (pos != -1) {
+            System.out.println("nim\t : " + listMhs[pos].nim);
+            System.out.println("nama\t : " + listMhs[pos].nama);
+            System.out.println("kelas\t : " + listMhs[pos].kelas);
+            System.out.println("ipk\t : " + x);
+          } else {
+            System.out.println("Data mahasiswa dengan IPK " + x + " tidak ditemukan");
+          }
+        }
+        ```],
+        [Modifikasi file `MahasiswaDemo{NoAbsen}.java` seperti idxmin:
         ```java
         import java.util.Scanner;
 
-        public class SiakadFor14 {
-            public static void main(String[] args) {
-                Scanner sc = new Scanner(System.in);
-                double nilai, tertinggi = 0, terendah = 100;
+        public class MahasiswaDemo14 {
+          public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            String nim, nama, kelas;
+            double ipk;
 
-                for (int i = 1; i <= 10; i++) {
-                    System.out.print("Masukkan nilai mahasiswa ke-" + i + ": ");
-                    nilai = sc.nextDouble();
-                    if (nilai > tertinggi) {
-                        tertinggi = nilai;
-                    }
-                    if (nilai < terendah) {
-                        terendah = nilai;
-                    }
-                }
+            MahasiswaBerprestasi14 list = new MahasiswaBerprestasi14();
 
-                System.out.println("Nilai tertinggi: " + tertinggi);
-                System.out.println("Nilai terendah: " + terendah);
+            System.out.println("SISTEM MANAJEMEN DATA MAHASISWA BERPRESTASI\n");
+            for (int i = 0; i < list.listMhs.length; i++) {
+              System.out.println("Masukkan data mahasiswa ke-"+(i+1));
+              
+              System.out.print("NIM	: ");
+              nim = sc.nextLine();
+              
+              System.out.print("Nama	: ");
+              nama = sc.nextLine();
+              
+              System.out.print("Kelas	: ");
+              kelas = sc.nextLine();
+              
+              System.out.print("IPK	: ");
+              ipk = sc.nextDouble();
+              sc.nextLine();
 
-                sc.close();
+              list.tambah(new Mahasiswa14(nim, nama, kelas, ipk));
+
+              System.out.println("------------------");
             }
+
+            System.out.println("Data mahasiswa sebelum sorting: ");
+            list.tampil();
+
+            System.out.println("Pencarian data");
+            System.out.println("------------------");
+            System.out.println("masukkan ipk mahasiswa yang dicari: ");
+            System.out.print("IPK: ");
+            double cari = sc.nextDouble();
+
+            System.out.println("menggunakan sequential searching");
+            double posisi = list.sequentialSearching(cari);
+            int pss = (int) posisi;
+            list.tampilPosisi(cari, pss);
+            list.tampilDataSearch(cari, pss);
+
+            sc.close();
+          }
         }
-        ```],
+        ```
+        #colbreak()
+        ],
         [_Compile_ dan _run_ program tersebut.
-        #image("2.png", width: 75%)]
+          #image("1a.png")
+          #colbreak()
+        ],
       ),
       pertanyaan: (
         (
-          "Sebutkan dan tunjukkan masing-masing komponen perulangan FOR pada kode program Percobaan 1!",
-          [Dalam kode tersebut, sintaks perulangan for dituliskan sebagai berikut:
-          ```java
-          for (int i = 1; i <= 10; i++) {
-            ...        
-          }
-          ```
-          `for` adalah keyword untuk sintaks perulangan for di java. Sedangkan `int i` adalah inisialisasi  variavel counter. Pada kode tersebut, nilai `i` pada iterasi pertama akan dimulai dari *1*. `1 <= 10` adalah kondisi sebagai batas/syarat perulangan tetap dieksekusi. Dalam hal ini, nilai `i` harus lebih kecil dari/sama dengan *10*. Terakhir `i++` adalah sintaks _increment_ untuk mengupdate nilai variabel counter setiap iterasi.],
+          [Jelaskan perbedaan method `tampilDataSearch` dan `tampilPosisi` pada class `MahasiswaBerprestasi`!],
+          [`tampilPosisi` berfungsi untuk menampilkan *pesan posisi index* sesuai dengan data parameter yang dimasukkan. Sedangkan `tampilDataSearch` berfungsi untuk menampilkan detail data berdasarkan parameter yang dimasukkan. Jika pada parameter pos isinya *-1*, maka kedua fungsi yang menampilkan pesan data tidak ditemukan.]
         ),
         (
-          [Mengapa variabel `tertinggi` diinisialisasi *0* dan `terendah` diinisialisasi *100*? Apa yang terjadi jika variabel `tertinggi` diinisialisasi *100* dan `terendah` diinisialisasi *0*?],
-          [Variabel `tertinggi` diinisialisasi dengan *0* (kemungkinan nilai paling rendah) dan `terendah` diinisialisasi dengan *100* (kemungkinan nilai paling tinggi) untuk memastikan bahwa nilai pertama yang dimasukkan oleh pengguna akan segera menggantikan nilai inisialisasi tersebut, dan proses perbandingan nilai akan berjalan dengan benar untuk seluruh data.
-          
-          Jika nilai inisialisasi tersebut dibalik, program akan menghasilkan output yang salah karena nilai-nilai yang dimasukkan tidak akan pernah bisa menggantikan nilai inisialisasi. Dengan kata lain, nilai `tertinggi` akan selalu menjadi *100*, sedangkan nilai `terendah` akan selalu menajdi *0*.
-          
-          #colbreak()
-          #colbreak()
-          
-          ],
-        ),
-        (
-          [Jelaskan fungsi dan alur kerja dari potongan kode berikut!
+          [Jelaskan fungsi `break` pada kode program di bawah ini!
           ```java
-          if (nilai > tertinggi) {
-              tertinggi = nilai;
-          }
-          if (nilai < terendah) {
-              terendah = nilai;
+          if (listMhs[j].ipk == cari) {
+            posisi = j;
+            break;
           }
           ```],
-          [Bagian kode tersebut akan membandingkan nilai sekarang (dalam iterasi) dan nilai tertinggi/terendah terakhir apakah nilai tersebut lebih besar/kecil dari nilai terakhir atau tidak. Jika iya, maka update nilai tertinggi/terendah menjadi nilai pada iterasi itu. Dengan mengulanginya sampai iterasi terakhir, kita akan mendapatkan nilai tertinggi dan terendah yang benar dari nilai-nilai tersebut.],
+          [Break berfungsi untuk menghentikan loop apabila data telah ditemukan.]
         ),
         (
-          [Modifikasi kode program sehingga terdapat perhitungan untuk menentukan berapa mahasiswa yang lulus dan yang tidak lulus berdasarkan batas kelulusan (nilai minimal 60). Tampilkan jumlah mahasiswa lulus dan tidak lulus setelah menampilkan nilai tertinggi dan terendah!
+          [Apa fungsi variabel pos atau indeks hasil pencarian dalam program sequential search?],
+          [Variabel tersebut berfungsi untuk menyimpan *data indeks* dari hasil _sequential search_. Jika tidak ditemukan, maka nilainya akan diset menjadi *-1*.]
+        ),
+        (
+          [Jika terdapat lebih dari satu data dengan nilai yang sama, hasil pencarian sequential search yang dibuat di atas akan menampilkan data ke berapa? Jelaskan!],
+          [Algoritma _sequential search_ akan mencari *kemunculan pertama* dari suatu data apabila data tersebut terdapat lebih 1. Hal ini disebabkan karena _sequential search_ melakukan pencarian secara berurutan (dari indeks 0 sampai index ke $n$)]
+        ),
+        (
+          [Berkaitan dengan pertanyaan nomor 2 di atas, apa yang terjadi jika perintah break dihapus dari kode di atas?],
+          [Walaupun data sudah ditemukan, fungsi tersebut akan tetap melakukan pencarian sampai elemen terakhir. Sehingga apabila data yang dicari adalah data duplikat, data indeks yang dikembalikan akan menunjuk ke *kemunculan terakhir* data tersebut.]
+        ),
+      ),
+    ),
+    (
+      subbab: "Percobaan 1: Sequential Search",
+      deskripsi: [
+        
+      ],
+      langkah: (
+        [Tambahkan fungsi `findBinarySearch`, pada file `MahasiswaBerprestasi{NoAbsen}.java`:
+        ```java
+        int findBinarySearch(double cari, int left, int right) {
+          int mid;
+          if (right >= left) {
+            mid = (left + right) / 2;
+            if (cari == listMhs[mid].ipk) {
+              return (mid);
+            } else if (listMhs[mid].ipk > cari) {
+              return findBinarySearch(cari, left, mid - 1);
+            } else {
+              return findBinarySearch(cari, mid + 1, right);
+            }
+          }
+          return -1;
+        }
+        ```],
+        [Tambahkan baris berikut di file `MahasiswaDemo{NoAbsen}.java` seperti idxmin:
+        ```java
+        System.out.println("------------------");
+        System.out.println("Pencarian data");
+        System.out.println("------------------");
+        System.out.println("masukkan ipk mahasiswa yang dicari: ");
+        System.out.print("IPK: ");
+        cari = sc.nextDouble();
 
+        System.out.println("menggunakan binary search");
+        double posisi2 = list.findBinarySearch(cari, 0, list.listMhs.length-1);
+        int pss2 = (int) posisi2;
+        list.tampilPosisi(cari, pss2);
+        list.tampilDataSearch(cari, pss2);
+        ```
+        #colbreak()
+        ],
+        [_Compile_ dan _run_ program tersebut.
+          #image("2a.png")
           #colbreak()
-
-          ```java
-          import java.util.Scanner;
-
-          public class SiakadFor14 {
-              public static void main(String[] args) {
-                  Scanner sc = new Scanner(System.in);
-                  double nilai, tertinggi = 0, terendah = 100;
-                  int lulus = 0, tidakLulus = 0;
-
-                  for (int i = 1; i <= 10; i++) {
-                      System.out.print("Masukkan nilai mahasiswa ke-" + i + ": ");
-                      nilai = sc.nextDouble();
-                      
-                      if (nilai > tertinggi) {
-                          tertinggi = nilai;
-                      }
-                      
-                      if (nilai < terendah) {
-                          terendah = nilai;
-                      }
-                      
-                      if (nilai >= 60.0) {
-                          lulus++; 
-                      } else {
-                          tidakLulus++; 
-                      }
-                  }
-
-                  System.out.println("\n--- Hasil Analisis Nilai ---");
-                  System.out.println("Nilai tertinggi: " + tertinggi);
-                  System.out.println("Nilai terendah: " + terendah);
-                  System.out.println("----------------------------");
-                  System.out.println("LULUS: " + lulus);
-                  System.out.println("TIDAK LULUS: " + tidakLulus);
-
-                  sc.close();
-              }
-          }          
-          ```],
+        ],
+      ),
+      pertanyaan: (
+        (
+          [Tunjukkan pada kode program yang mana proses _divide_ dijalankan!],
+          [Proses *divide* terjadi pada baris `mid = (left + right) / 2;`, di mana rentang pencarian dibagi menjadi dua bagian melalui titik tengah.]
+        ),
+        (
+          [Tunjukkan pada kode program yang mana proses _conquer_ dijalankan!],
+          [Proses *conquer* terjadi saat pemanggilan rekursif `findBinarySearch(cari, left, mid - 1)` atau `findBinarySearch(cari, mid + 1, right)`, di mana program fokus mencari pada salah satu sub-bagian yang relevan.]
+        ),
+        (
+          [Apa fungsi `left`, `right`, dan `mid`?],
           [
-            #align(center)[
-              #image("3.png", height: 50%)
-            ]
+            `left`: Indeks awal rentang pencarian.  \
+            `right`: Indeks akhir rentang pencarian.  \
+            `mid`: Indeks titik tengah yang digunakan sebagai pembanding dengan data yang dicari.
           ]
         ),
         (
-          [*_Commit_ dan _push_ kode program ke Github*],
-          [#image("6.png", width: 80%)]
-        )
-      ),
-    ),
-    (
-      subbab: "Percobaan 2: Studi Kasus Nilai Mahasiswa - Perulangan WHILE",
-      deskripsi: [
-        Seorang dosen ingin memasukkan nilai beberapa mahasiswa ke dalam SIAKAD untuk ditentukan kategori nilai hurufnya. Program harus meminta dosen untuk memasukkan nilai setiap mahasiswa. Jika dosen memasukkan nilai yang tidak valid (negatif atau lebih dari 100), program harus mengabaikan input tersebut dan meminta dosen untuk melakukan input ulang. Selanjutnya, nilai yang valid dikelompokkan ke dalam kategori huruf A (80 < nilai ≤ 100), B+ (73 < nilai ≤ 80), B (65 < nilai ≤ 73), C+ (60 < nilai ≤ 65), C (50 < nilai ≤ 60), D (39 < nilai ≤ 50), dan E (nilai ≤ 39). 
-        
-        Berdasarkan studi kasus tersebut, buat program menggunakan bahasa pemrograman Java!
-      ],
-      langkah: (
-        [Masih dengan repo dan folder yang sama, buat file baru di dalam folder tersebut dengan nama `SiakadWhile{NoAbsen}.java`.],
-        [Tambahkan kode berikut:
-        ```java
-        import java.util.Scanner;
-
-        public class SiakadWhile14 {
-            public static void main(String[] args) {
-                Scanner sc = new Scanner(System.in);
-
-                int nilai, jml, i = 0;
-
-                System.out.print("Masukkan jumlah mahasiswa: ");
-                jml = sc.nextInt();
-
-                while (i < jml) {
-                    System.out.print("Masukkan nilai mahasiswa ke-" + (i + 1) + ": ");
-                    nilai = sc.nextInt();
-
-                    if (nilai < 0 || nilai > 100) {
-                        System.out.println("Nilai tidak valid. Masukkan lagi nilai yang valid!");
-                        continue;
-                    }
-
-                    if (nilai > 80 && nilai <= 100) {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah A");
-                    } else if (nilai > 73 && nilai <= 80) {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah B+");
-                    } else if (nilai > 65 && nilai <= 73) {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah B");
-                    } else if (nilai > 60 && nilai <= 65) {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah C+");
-                    } else if (nilai > 50 && nilai <= 60) {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah C");
-                    } else if (nilai > 39 && nilai <= 50) {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah D");
-                    } else {
-                        System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah E");
-                    }
-
-                    i++;
-                }
-
-                sc.close();
-            }
-        }
-
-        ```],
-        [_Compile_ dan _run_ program tersebut.
-        #image("4.png", width: 75%)]
-      ),
-      pertanyaan: (
-        (
-          [Pada potongan kode berikut, tentukan maksud dan kegunaan dari sintaks berikut:
-          ```java
-          if (nilai < 0 || nilai > 100) {
-              System.out.println("Nilai tidak valid. Masukkan lagi nilai yang valid!");
-              continue;
-          }
-          ```],
-          [Sesuai dengan perintah pada studi kasus, bagian kode tersebut berfungsi untuk memvalidasi nilai yang dimasukkan oleh pengguna. Jika nilai yang dimasukkan tidak valid, maka variabel counter `i` tidak akan ter-update (increment), dan program akan meminta pengguna untuk memasukkan nilai lagi.],
+          [Jika data IPK yang dimasukkan tidak urut. Apakah program masih dapat berjalan? Mengapa demikian?],
+          [Program tetap berjalan, tetapi hasilnya tidak akurat (salah). Hal ini dikarenakan algoritma *binary search* hanya dapat bekerja dengan syarat data *telah terurut*.]
         ),
         (
-          [Mengapa sintaks `i++` dituliskan di akhir perulangan WHILE? Apa yang terjadi jika posisinya dituliskan di awal perulangan WHILE?],
-          [Sintaks tersebut diletakkan di akhir perulangan while karena ia berfungsi sebagai updater untuk variabel counter yang memastikan perulangan tersebut berhenti setelah jumlah iterasi yang diinginkan tercapai.
-          
-          Apabila sintaks tersebut diletakan di awal perulangan while, maka yang terjadi adalah ada iterasi yang hilang yakni mahasiswa ke-1. Selain itu, apabila pengguna pada iterasi tersebut memasukkan nilai yang salah, alih-alih memasukkan ulang mahasiswa pada iterasi itu, program malah menyuruh kita untuk memasukkan nilai mahasiswa selanjutnya. Dengan kata lain, proses validasi akan menjadi tidak berguna apabila `i++` ditaruh di awal perulangan while],
-        ),
-        (
-          [Apabila jumlah mahasiswa yang dimasukkan adalah *19*, berapa kali perulangan WHILE akan berjalan?],
-          [Perulangan while akan dijalankan 19 kali, dimulai dari 0-18.],
-        ),
-        (
-          [Modifikasi kode program sehingga apabila terdapat mahasiswa yang mendapat nilai A, program menampilkan pesan tambahan "Bagus, pertahankan nilainya"!
-          
-          ```java
-          import java.util.Scanner;
-
-          public class SiakadWhile14 {
-              public static void main(String[] args) {
-                  Scanner sc = new Scanner(System.in);
-                  
-                  int nilai, jml, i = 0;
-                  
-                  System.out.print("Masukkan jumlah mahasiswa: ");
-                  jml = sc.nextInt();
-                  
-                  while (i < jml) {
-                      System.out.print("Masukkan nilai mahasiswa ke-" + (i + 1) + ": ");
-                      nilai = sc.nextInt();
-                      
-                      if (nilai < 0 || nilai > 100) {
-                          System.out.println("Nilai tidak valid. Masukkan lagi nilai yang valid!");
-                          continue;
-                      }
-                      
-                      if (nilai > 80 && nilai <= 100) {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah A");
-                          System.out.println("Bagus, pertahankan nilainya!");
-                      } else if (nilai > 73 && nilai <= 80) {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah B+");
-                      } else if (nilai > 65 && nilai <= 73) {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah B");
-                      } else if (nilai > 60 && nilai <= 65) {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah C+");
-                      } else if (nilai > 50 && nilai <= 60) {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah C");
-                      } else if (nilai > 39 && nilai <= 50) {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah D");
-                      } else {
-                          System.out.println("Nilai mahasiswa ke-" + (i + 1) + " adalah E");
-                      }
-                      
-                      i++;
-                  }
-                  
-                  sc.close();
-              }
-          }
-          ```],
+          [Jika IPK yang dimasukkan dari IPK terbesar ke terkecil (misal: 3.8, 3.7, 3.5, 3.4, 3.2) dan elemen yang dicari adalah 3.2. Bagaimana hasil dari binary search? Apakah sesuai? Jika tidak sesuai maka ubahlah kode program binary seach agar hasilnya sesuai],
           [
-            #align(center)[
-              #image("5.png", height: 40%)
-            ]
-
-            #colbreak()
-            #colbreak()
-          ],
+            Hasilnya tidak sesuai karena logika default pada fungsi `findBinarySearch` adalah untuk data yang telah terurut secara _ascending_. Oleh karena itu, kita perlu memanggil fungsi `selectionSort` sebelum fungsi `findBinarySearch` dipanggil:
+            ```java
+            System.out.println("menggunakan binary search");
+            list.selectionSort(); // Sort terlebih dahulu
+            double posisi2 = list.findBinarySearch(cari, 0, list.listMhs.length-1);
+            int pss2 = (int) posisi2;
+            list.tampilPosisi(cari, pss2);
+            list.tampilDataSearch(cari, pss2);
+            ```
+          ]
         ),
         (
-          [*_Commit_ dan _push_ kode program ke Github*],
-          [#image("7.png", width: 80%)]
-        )
-      ),
-    ),
-    (
-      subbab: "Percobaan 3: Studi Kasus Transaksi di Kafe - Perulangan DO-WHILE",
-      deskripsi: [
-        Di sebuah kafe, kasir ingin memproses transaksi beberapa pelanggan. Pelanggan dapat membeli lebih dari satu item (kopi dengan harga Rp 12.000, teh dengan harga Rp 7.000, dan roti dengan harga Rp 20.000), dan kasir akan terus memasukkan jumlah pembelian untuk setiap pelanggan. Jika ada pelanggan yang memutuskan untuk membatalkan transaksi (dengan memasukkan "batal"), maka kasir akan menghentikan input transaksi dan program berhenti.
-        
-        Berdasarkan studi kasus tersebut, buat program menggunakan bahasa pemrograman Java!
-      ],
-      langkah: (
-        [Masih dengan repo dan folder yang sama, buat file baru di dalam folder tersebut dengan nama `SiakadDoWhile{NoAbsen}.java`.],
-        [Tambahkan kode berikut:
-        ```java
-        import java.util.Scanner;
+          [Jelaskan bagaimana binary search menentukan bahwa data yang dicari tidak ditemukan di dalam array.],
+          [Data dianggap tidak ditemukan jika kondisi `right >= left` tidak lagi terpenuhi (indeks `left` melewati indeks `right`), sehingga fungsi keluar dari blok `if` dan mengembalikan nilai `-1`.]
+        ),
+        (
+          [Modifikasi program di atas yang mana jumlah mahasiswa yang diinputkan sesuai dengan masukan dari keyboard.],
+          [
+            *MahasiswaDemo14.java*
+            ```java
+            ...
+            System.out.println("SISTEM MANAJEMEN DATA MAHASISWA BERPRESTASI\n");
+		
+            // Input jml sebelum input
+            System.out.print("Jumlah mahasiswa: ");
+            int jml = sc.nextInt();
+            sc.nextLine();
 
-        public class KafeDoWhile14 {
-            public static void main(String[] args) {
-                Scanner sc = new Scanner(System.in);
-                
-                int kopi, teh, roti;
-                String namaPelanggan;
-                
-                final int hargaKopi = 12000;
-                final int hargaTeh = 7000;
-                final int hargaRoti = 20000;
-                long totalHarga;
-                
-                do {
-                    System.out.print("Masukkan nama pelanggan (ketik 'batal' untuk keluar): ");
-                    namaPelanggan = sc.next();
-                    
-                    if (namaPelanggan.equalsIgnoreCase("batal")) {
-                        System.out.println("Transaksi dibatalkan.");
-                        break;
-                    }
-                    
-                    System.out.print("Jumlah kopi: ");
-                    kopi = sc.nextInt();
-                    System.out.print("Jumlah teh: ");
-                    teh = sc.nextInt();
-                    System.out.print("Jumlah roti: ");
-                    roti = sc.nextInt();
-                    
-                    totalHarga = (long)kopi * hargaKopi + (long)teh * hargaTeh + (long)roti * hargaRoti;
-                    System.out.println("Total yang harus dibayar: Rp " + totalHarga);
-                    sc.nextLine(); 
-                } while (true);
-                
-                System.out.println("Semua transaksi selesai.");
-                sc.close();
+            MahasiswaBerprestasi14 list = new MahasiswaBerprestasi14(jml);
+            ...
+            ```
+            *MahasiswaBerprestasi14.java*
+            ```java
+            ...
+            // Tambah constructor default tanpa parameter & dengan parameter
+            MahasiswaBerprestasi14() {
+              this.listMhs = new Mahasiswa14[5];
             }
-        }
-        ```],
-        [_Compile_ dan _run_ program tersebut.
-        #image("8.png", width: 80%)]
-      ),
-      pertanyaan: (
-        (
-          [Pada penggunaan DO-WHILE ini, apabila nama pelanggan yang dimasukkan pertama kali adalah “batal”, maka berapa kali perulangan dilakukan?],
-          [Perulangan akan dilakukan *satu kali*. Karena seperti sifat DO-WHILE "lakukan dulu, baru cek". Sehingga ketika pelanggan memasukkan "batal" pada iterasi pertama, maka iterasi kedua tidak akan dijalankan.],
-        ),
-        (
-          [Sebutkan kondisi berhenti yang digunakan pada perulangan DO-WHILE tersebut!],
-          [Kondisi berakhir pada perulangan tersebut (saat pengguna memasukkan "batal") terdapat pada bagian kode berikut:
-          ```java
-          if (namaPelanggan.equalsIgnoreCase("batal")) {
-              System.out.println("Transaksi dibatalkan.");
-              break;
-          }
-          ```
-          ],
-        ),
-        (
-          [Apa fungsi dari penggunaan nilai `true` pada kondisi DO-WHILE?],
-          [Karena pada perulangan tersebut kondisi di-set `true`, maka perulangan akan dijalankan selamanya, *SELAMA* pengguna tidak memasukkan "batal" pada saat input nama pelanggan.],
-        ),
-        (
-          [Mengapa perulangan DO-WHILE tersebut tetap berjalan meskipun tidak ada komponen inisialisasi dan update?],
-          [Perulangan tersebut tetap berjalan karena komponen inisialisasi dan update yang mengatur logikanya berada di dalam perulangan itu sendiri. Oleh karena itu, yang penting kondisi perulangannya telah diatur secara eksplisit menjadi `true` dan kondisi dan logika kapan harus berhenti sudah ada di dalam perulangan (dalam hal ini ketika pengguna memasukkan nilai "batal"). Kalau tidak ada kondisi berhenti, maka program akan berjalan terus-menerus.
-          
-          #colbreak()
-          #colbreak()
 
-          ],
+            MahasiswaBerprestasi14(int len) {
+              this.listMhs = new Mahasiswa14[len];
+            }
+            ...
+            ```
+          ]
         ),
-        (
-          [*_Commit_ dan _push_ kode program ke Github*],
-          [#image("9.png", width: 80%)]
-        )
       ),
     ),
   ))
 
-  #tugas(data: (
-    (
-      subbab: "Tugas 1",
-      konten: [
-        Seorang pengelola bioskop ingin membuat program untuk menghitung total penjualan tiket dalam satu hari. Tiket dijual dengan harga `Rp 50.000 per tiket`. Program harus menghitung total tiket yang terjual dan total harga penjualan tiket selama satu hari dengan ketentuan sebagai berikut:
+  // #tugas(data: (
+  //   (
+  //     subbab: "Tugas 1",
+  //     konten: [
+  //       Perhatikan class diagram dibawah ini:
 
-        - Jika pelanggan membeli > 4 tiket, pelanggan mendapatkan diskon 10%.
-        - Jika pelanggan membeli > 10 tiket, pelanggan mendapatkan diskon 15%.
-        - Jika input jumlah tiket tidak valid (negatif), program akan mengabaikan input tersebut dan meminta input ulang.
         
-        *Catatan:* Perulangan dapat menggunakan for, while, atau do-while. Penambahan break atau continue jika diperlukan.
-
-        #colbreak()
-
-        ```java
-        import java.util.Scanner;
-
-        public class Tugas1 {
-            public static void main(String[] args) {
-                // Deklarasi variabel
-                Scanner sc = new Scanner(System.in);
-                int hargaKotor = 0, totalTiketTerjual = 0;
-                double diskon = 0, totalBayar = 0, totalPenjualanBersih = 0;
-
-                // Input jumlah pelanggan
-                System.out.print("Masukkan total pelanggan hari ini: ");
-                int jumlahPelanggan = sc.nextInt();
-
-                int i = 0;
-
-                while (i < jumlahPelanggan) {
-                    System.out.println("\n--- Pelanggan ke-" + (i + 1) + " ---");
-                    System.out.print("Masukkan jumlah tiket yang dibeli: ");
-                    int jumlahTiket = sc.nextInt();
-
-                    // Validasi input
-                    if (jumlahTiket < 0) {
-                        System.out.println("❌ Jumlah tiket tidak valid. Silakan masukkan ulang.");
-                        continue;
-                    }
-
-                    hargaKotor = jumlahTiket * 50000;
-
-                    // Hitung Diskon
-                    if (jumlahTiket > 10) {
-                        diskon = 0.15;
-                    } else if (jumlahTiket > 4) {
-                        diskon = 0.10;
-                    }
-
-                    // Hitung total harga setelah diskon
-                    totalBayar = (double) hargaKotor - ((double) hargaKotor * diskon);
-
-                    // Update total keseluruhan
-                    totalTiketTerjual += jumlahTiket;
-                    totalPenjualanBersih += totalBayar;
-
-                    System.out.printf("Harga Kotor: Rp %d\n", hargaKotor);
-                    System.out.printf("Diskon: %.0f%%\n", (diskon * 100));
-                    System.out.printf("Total Bayar: Rp %.0f\n", totalBayar);
-
-                    // Update counter
-                    i++;
-                }
-
-                // Tampilkan hasil akhir
-                System.out.println("\n====== LAPORAN PENJUALAN ======");
-                System.out.println("Total Tiket Terjual: " + totalTiketTerjual + " tiket");
-                System.out.printf("Pendapatan Bersih: Rp %.2f%n", totalPenjualanBersih);
-                System.out.println("=================================");
-
-                sc.close();
-            }
-        }
-        ```
-
-        #align(center)[
-          #image("10.png", width: 75%)
-        ]
-      ],
-    ),
-    (
-      subbab: "Tugas 2",
-      konten: [
-        Perhatikan flowchart berikut!
-
-        #image("11.png")
-
-        Sebuah tempat parkir ingin membuat program untuk menghitung total pembayaran parkir dari beberapa kendaraan. Tarif parkir adalah *Rp 3.000* per jam untuk mobil dan *Rp 2.000* per jam untuk motor. Namun, jika durasi parkir lebih dari *5 jam*, diberikan tarif tetap sebesar *Rp 12.500* untuk semua kendaraan. Program akan terus meminta masukan selama input bukan *0*. 
+  //       Berdasarkan class diagram diatas buatlah menu dikelas main dengan pilihan menu:
         
-        Implementasikan flowchart tersebut ke dalam bentuk kode program Java!
+  //       #colbreak()
 
-        #colbreak()
+  //       #table(
+  //         columns: 1,
+  //         [*Dosen14.java*],
+  //         [```java
+         
+  //         ```],
+  //       )
 
-        ```java
-        import java.util.Scanner;
+  //       #colbreak()
 
-        public class Tugas2 {
-            public static void main(String[] args) {
-                
-                // Deklarasi variabel
-                Scanner sc = new Scanner(System.in);
-                int jenis, durasi, total = 0;
-                
-                // Masuk ke perulangan
-                do {
-                    System.out.println("Masukkan jenis kendaraan:");
-                    System.out.println("1. Mobil");
-                    System.out.println("2. Motor");
-                    System.out.println("0. Keluar");
-                    jenis = sc.nextInt();
-                    
-                    if (jenis == 1 || jenis == 2) {
-                        System.out.print("Masukkan durasi parkir (jam): ");
-                        durasi = sc.nextInt();
-                        
-                        // Pemilihan biaya parkir berdasarkan durasi atau jenis kendaraan
-                        if (durasi > 5) {
-                            total += 12500;
-                        } else {
-                            if (jenis == 1) {
-                                total += durasi * 3000;
-                            } else if (jenis == 2) {
-                                total += durasi * 2000;
-                            }
-                        }
-                    } else if (jenis != 0) {
-                        System.out.println("Jenis kendaraan tidak valid.");
-                    }
-                    
-                } while (jenis != 0);
-                
-                System.out.println("Total biaya parkir hari ini: " + total);
-                
-                sc.close();
-            }
-        }
-        ```
+  //     ],
+  //   ),
+  // ))
 
-        #colbreak()
-
-        #align(center)[
-          #image("12.png", width: 80%)
-        ]
-      ],
-    ),
-  ))
-  
   \
-  \
-  *Link Praktikum:* #link("https://github.com/fami0110/Praktikum_Daspro")
+  *Link Praktikum:* #link("https://github.com/fami0110/Praktikum_ASD")
+
 ]
